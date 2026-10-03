@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#202223">
+<title>PAINEL DO PONTO DO LANCHE</title>
+<link rel="stylesheet" href="/admin/style.css">
+<style id="ponto-visual-identity">
+:root{
+  --dark:#2d2f30;
+  --dark2:#202223;
+  --cream:#f6f0e5;
+  --cream2:#eee2ce;
+  --beige:#d5b987;
+  --orange:#c96b2d;
+  --orange2:#a95522;
+  --white:#fffdf9;
+  --text:#343230;
+  --muted:#716c64;
+  --line:#e3d6c1;
+  --green:#557a61;
+  --danger:#a95546;
+  --shadow:0 18px 50px rgba(35,30,25,.10);
+  --radius:18px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:var(--cream);
+  color:var(--text);
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+input,textarea,select{color:var(--text);background:var(--white)}
+input:focus,textarea:focus,select:focus{
+  outline:none;
+  border-color:var(--orange)!important;
+  box-shadow:0 0 0 3px rgba(201,107,45,.10);
+}
+
+/* LOGIN */
+#loginScreen{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:24px;
+  background:
+    radial-gradient(circle at 80% 15%,rgba(201,107,45,.16),transparent 28%),
+    radial-gradient(circle at 15% 85%,rgba(213,185,135,.12),transparent 30%),
+    linear-gradient(135deg,var(--dark2),var(--dark));
+}
+.loginbox{
+  width:min(440px,100%);
+  padding:38px;
+  background:rgba(246,240,229,.98);
+  border:1px solid rgba(213,185,135,.65);
+  border-radius:28px;
+  box-shadow:0 30px 80px rgba(0,0,0,.28);
+  text-align:center;
+}
+.loginbox .mark{
+  width:70px;height:70px;
+  margin:0 auto 18px;
+  display:grid;place-items:center;
+  border:3px solid var(--beige);
+  border-radius:50%;
+  background:var(--cream);
+  color:var(--dark);
+  font:900 28px Georgia,serif;
+}
+.loginbox h1{
+  margin:0;
+  color:var(--dark);
+  font:900 30px/1.05 Georgia,serif;
+}
+.loginbox .field{text-align:left}
+.loginbox .btn.wide{margin-top:8px}
+.loginbox p{line-height:1.5}
+
+/* APP / SIDEBAR */
+#app{min-height:100vh;background:var(--cream)}
+.side{
+  position:fixed;
+  left:0;top:0;bottom:0;
+  width:265px;
+  padding:24px 16px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  overflow:auto;
+  background:var(--dark2);
+  color:#eee9df;
+  border-right:1px solid rgba(213,185,135,.20);
+  box-shadow:12px 0 35px rgba(35,30,25,.08);
+  z-index:20;
+}
+.side .brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:4px 10px 22px;
+  margin-bottom:8px;
+  border-bottom:1px solid rgba(213,185,135,.20);
+}
+.side .brand .mark{
+  flex:0 0 50px;
+  width:50px;height:50px;
+  display:grid;place-items:center;
+  border:2px solid var(--beige);
+  border-radius:50%;
+  background:var(--cream);
+  color:var(--dark);
+  font:900 21px Georgia,serif;
+}
+.side .brand b{
+  color:#fff;
+  font:800 16px/1.1 Georgia,serif;
+}
+.navbtn{
+  width:100%;
+  min-height:46px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px 13px;
+  border:1px solid transparent;
+  border-radius:13px;
+  background:transparent;
+  color:#cfc7b9;
+  text-align:left;
+  font-weight:800;
+  transition:.18s ease;
+}
+.navbtn:hover{
+  background:rgba(246,240,229,.07);
+  color:#fff;
+  transform:translateX(2px);
+}
+.navbtn.on{
+  background:var(--orange);
+  border-color:rgba(255,255,255,.12);
+  color:#fff;
+  box-shadow:0 8px 22px rgba(201,107,45,.22);
+}
+.bdg{
+  margin-left:auto;
+  min-width:22px;height:22px;
+  display:grid;place-items:center;
+  padding:0 6px;
+  border-radius:999px;
+  background:var(--cream);
+  color:var(--dark);
+  font-size:11px;
+}
+.bdg.hidden{display:none}
+.admin-meta{
+  margin-top:auto;
+  padding:15px 10px 4px;
+  border-top:1px solid rgba(213,185,135,.20);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+
+/* MAIN */
+.main{
+  margin-left:265px;
+  min-height:100vh;
+  padding:30px clamp(18px,4vw,48px) 50px;
+}
+.pagehead{
+  min-height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:22px;
+}
+.pagehead h2{
+  margin:0;
+  color:var(--dark);
+  font:900 clamp(27px,3vw,38px)/1 Georgia,serif;
+}
+.pagehead small{
+  color:var(--orange);
+  font-weight:900;
+  letter-spacing:1.5px;
+}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+.panel{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+.panel h3{
+  margin:0 0 15px;
+  color:var(--dark);
+  font:900 18px Georgia,serif;
+}
+
+/* BOTÕES */
+.btn{
+  border:0;
+  border-radius:999px;
+  padding:11px 17px;
+  background:var(--orange);
+  color:#fff;
+  font-weight:900;
+  transition:.18s ease;
+}
+.btn:hover{
+  transform:translateY(-1px);
+  background:var(--orange2);
+}
+.btn.dark{
+  background:var(--dark);
+  color:#fff;
+}
+.btn.dark:hover{background:#171819}
+.btn.green{
+  background:var(--green);
+  color:#fff;
+}
+.btn.danger{
+  background:var(--danger);
+  color:#fff;
+}
+.btn.ghost{
+  background:transparent;
+  border:1px solid var(--line);
+  color:var(--text);
+}
+.side .btn.ghost{
+  color:#cfc7b9;
+  border-color:rgba(255,255,255,.14);
+}
+.btn.small{padding:8px 13px;font-size:12px}
+.btn.wide{width:100%}
+
+/* CAMPOS */
+.field{margin:10px 0}
+.field label{
+  display:block;
+  margin-bottom:6px;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:900;
+}
+.field input,.field textarea,.field select,
+.searchbox input,
+.panel input,.panel textarea,.panel select{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:11px 12px;
+  background:var(--white);
+}
+.pins{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:7px;
+}
+.pin{
+  width:100%;
+  text-align:center;
+  font-size:20px;
+  font-weight:900;
+  padding:10px 4px!important;
+}
+.row2{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+/* KANBAN / PEDIDOS */
+.kanban{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(210px,1fr));
+  gap:14px;
+  overflow-x:auto;
+  padding-bottom:8px;
+}
+.kanban > *{
+  border-radius:16px;
+}
+
+/* GRÁFICOS */
+.bars{
+  min-height:220px;
+  display:flex;
+  align-items:flex-end;
+  gap:8px;
+  overflow-x:auto;
+  padding:16px 4px 4px;
+}
+.bars > *{
+  min-width:28px;
+}
+
+/* TABELAS */
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  overflow:hidden;
+}
+th,td{
+  padding:11px 12px;
+  border-bottom:1px solid var(--line);
+  text-align:left;
+  white-space:nowrap;
+}
+th{
+  background:var(--cream2);
+  color:var(--dark);
+  font-size:12px;
+  font-weight:900;
+}
+tr:last-child td{border-bottom:0}
+tr:hover td{background:#faf6ee}
+
+/* AVISOS / MODAIS */
+.err{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:10px;
+  background:#f7e3d9;
+  color:#8a3c1e;
+  font-size:13px;
+}
+.modal,.modal *{box-sizing:border-box}
+.modal{
+  background:rgba(32,34,35,.72)!important;
+  backdrop-filter:blur(5px);
+}
+.mbox{
+  background:var(--cream)!important;
+  border:1px solid var(--beige);
+  border-radius:24px!important;
+  box-shadow:0 30px 80px rgba(0,0,0,.28);
+}
+#newOrderAlarm{
+  background:rgba(32,34,35,.76)!important;
+  backdrop-filter:blur(5px);
+}
+.alarmbox{
+  background:var(--cream)!important;
+  border:2px solid var(--orange)!important;
+  border-radius:26px!important;
+  box-shadow:0 30px 80px rgba(0,0,0,.30)!important;
+}
+.alarmbox h2{
+  color:var(--dark);
+  font:900 28px Georgia,serif;
+}
+#toasts > *{
+  border-radius:999px!important;
+  background:var(--dark)!important;
+  color:#fff!important;
+  box-shadow:0 12px 30px rgba(0,0,0,.22);
+}
+
+/* RESPONSIVO */
+@media(max-width:1100px){
+  .side{width:225px}
+  .main{margin-left:225px}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kanban{grid-template-columns:repeat(5,minmax(190px,1fr))}
+}
+@media(max-width:800px){
+  .side{
+    position:relative;
+    width:100%;
+    height:auto;
+    min-height:0;
+    padding:14px;
+  }
+  .side .brand{padding-bottom:14px}
+  .admin-meta{margin-top:8px}
+  .main{
+    margin-left:0;
+    padding:22px 15px 35px;
+  }
+  .g2,.g4{grid-template-columns:1fr}
+  .pagehead{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .pagehead > div{width:100%}
+  .row2{grid-template-columns:1fr}
+  .loginbox{padding:28px 20px}
+}
+@media(max-width:560px){
+  .side .brand b{font-size:15px}
+  .navbtn{min-height:43px}
+  .pins{gap:5px}
+  .pin{font-size:17px}
+  .panel{padding:15px}
+  .pagehead h2{font-size:29px}
+  .kanban{grid-template-columns:repeat(5,minmax(230px,1fr))}
+}
+
+/* BLOQUEIO REAL DO PAINEL: nada do sistema fica acessível antes do PIN */
+html.admin-locked, html.admin-locked body{overflow:hidden!important;height:100%!important}
+#app.hidden{display:none!important;visibility:hidden!important;pointer-events:none!important}
+#loginScreen.hidden{display:none!important;visibility:hidden!important;pointer-events:none!important}
+#loginScreen{position:fixed;inset:0;z-index:99999;overflow:auto}
+#app{position:relative;z-index:1}
+.pin{caret-color:var(--orange);text-align:center;font-size:24px;font-weight:900}
+.pin:focus{transform:translateY(-1px)}
+</style>
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23f6f0e5' stroke='%23d5b987' stroke-width='4'/><text x='50' y='66' font-size='44' text-anchor='middle' font-family='Georgia' font-weight='bold' fill='%232d2f30'>PL</text></svg>">
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginScreen">
+ <div class="loginbox">
+  <div class="mark">PL</div>
+  <h1>Painel do Ponto do Lanche</h1>
+  <p style="color:var(--muted);font-size:13.5px;margin:6px 0 8px">Área restrita ao proprietário</p>
+  <div class="field"><label>Usuário</label><input id="lu" value="proprietario" autocomplete="username"></div>
+  <div class="field"><label>PIN de acesso</label>
+   <div class="pins">
+    <input class="pin" id="p0" maxlength="1" inputmode="numeric"><input class="pin" id="p1" maxlength="1" inputmode="numeric">
+    <input class="pin" id="p2" maxlength="1" inputmode="numeric"><input class="pin" id="p3" maxlength="1" inputmode="numeric">
+    <input class="pin" id="p4" maxlength="1" inputmode="numeric"><input class="pin" id="p5" maxlength="1" inputmode="numeric">
+   </div>
+  </div>
+ <button class="btn wide" onclick="doLogin()">Entrar no painel</button>
+ <div class="err" id="lerr"></div>
+ <p style="color:var(--muted);font-size:11.5px;margin-top:14px">🔒 Acesso protegido por PIN criptografado no servidor.</p>
+ </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app">
+ <aside class="side">
+  <div class="brand"><div class="mark">PL</div><div><b>Painel do<br>Ponto do Lanche</b></div></div>
+  <button class="navbtn on" data-page="dashboard" onclick="go('dashboard')">📊 Dashboard</button>
+  <button class="navbtn" data-page="orders" onclick="go('orders')">🧾 Pedidos <span class="bdg hidden" id="newOrdersBadge">0</span></button>
+  <button class="navbtn" data-page="menu" onclick="go('menu')">🍔 Cardápio</button>
+  <button class="navbtn" data-page="notes" onclick="go('notes')">📓 Meu Caderno</button>
+  <button class="navbtn" data-page="cash" onclick="go('cash')">💰 Fluxo de Caixa</button>
+  <button class="navbtn" data-page="inventory" onclick="go('inventory')">📦 Estoque <span class="bdg hidden" id="lowStockBadge">0</span></button>
+  <button class="navbtn" data-page="org" onclick="go('org')">🗓️ Organização</button>
+  <button class="navbtn" data-page="settings" onclick="go('settings')">⚙️ Configurações</button>
+  <div class="admin-meta">
+   <span id="clock" style="color:#8f887c"></span>
+   <button class="btn small ghost" style="color:#cfc7b9;border-color:#ffffff24" onclick="logout()">Sair</button>
+  </div>
+ </aside>
+
+ <main class="main">
+
+ <!-- DASHBOARD -->
+ <section id="page-dashboard">
+  <div class="pagehead"><h2>📊 Dashboard</h2><small>VISÃO GERAL DE HOJE</small></div>
+  <div class="grid g4" id="dashTop"></div>
+  <div class="grid g2" style="margin-top:16px">
+   <div class="panel"><h3>Vendas por dia (14 dias)</h3><div class="bars" id="chartDaily"></div></div>
+   <div class="panel"><h3>Produtos mais vendidos</h3><div class="bars" id="chartTop"></div></div>
+   <div class="panel"><h3>Vendas por semana</h3><div class="bars" id="chartWeekly"></div></div>
+   <div class="panel"><h3>Vendas por mês</h3><div class="bars" id="chartMonthly"></div></div>
+  </div>
+ </section>
+
+ <!-- PEDIDOS -->
+ <section id="page-orders" class="hidden">
+  <div class="pagehead"><h2>🧾 Pedidos</h2>
+   <div style="display:flex;gap:8px;align-items:center"><span id="liveDot" style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block"></span><small style="color:var(--muted)">AO VIVO — atualização automática</small></div>
+  </div>
+  <div class="kanban" id="kanban"></div>
+ </section>
+
+ <!-- CARDÁPIO -->
+ <section id="page-menu" class="hidden">
+  <div class="pagehead"><h2>🍔 Cardápio</h2><div style="display:flex;gap:8px"><button class="btn dark" onclick="newCategoryModal()">+ Nova categoria</button><button class="btn" onclick="openProductModal()">+ Adicionar produto</button></div></div>
+  <div id="menuAdmin"></div>
+  <div style="margin-top:20px" class="panel">
+   <h3>🎁 Promoções</h3>
+   <div id="promoAdmin"></div>
+   <button class="btn small dark" onclick="openPromoModal()">+ Nova promoção</button>
+  </div>
+ </section>
+
+ <!-- CADERNO -->
+ <section id="page-notes" class="hidden">
+  <div class="pagehead"><h2>📓 Meu Caderno</h2><button class="btn" onclick="openNoteModal()">+ Nova anotação</button></div>
+  <div class="grid g2">
+   <div>
+    <div class="searchbox"><input id="noteSearch" placeholder="🔍 Pesquisar anotações..." oninput="drawNotes()"></div>
+    <div id="notesList"></div>
+   </div>
+   <div class="panel"><h3>✅ Listas de tarefas</h3>
+    <div style="display:flex;gap:8px"><input id="taskInput" placeholder="Nova tarefa..." style="flex:1;border:1px solid var(--line);border-radius:11px;padding:10px"><button class="btn small" onclick="addTask()">+</button></div>
+    <div id="taskList" style="margin-top:10px"></div>
+   </div>
+  </div>
+ </section>
+
+ <!-- CAIXA -->
+ <section id="page-cash" class="hidden">
+  <div class="pagehead"><h2>💰 Fluxo de Caixa</h2>
+   <select id="cashPeriod" onchange="loadCash()" style="border:1px solid var(--line);border-radius:11px;padding:10px 14px;font-weight:700;background:var(--white)">
+    <option value="hoje">Hoje</option><option value="semana">Semana</option><option value="mes">Mês</option><option value="custom">Período personalizado</option>
+   </select>
+  </div>
+  <div id="cashCustom" class="hidden" style="display:flex;gap:8px;margin-bottom:12px">
+   <input type="date" id="cashFrom" style="border:1px solid var(--line);border-radius:11px;padding:10px"><input type="date" id="cashTo" style="border:1px solid var(--line);border-radius:11px;padding:10px">
+   <button class="btn small" onclick="loadCash()">Filtrar</button>
+  </div>
+  <div class="grid g4" id="cashTotals"></div>
+  <div class="panel" style="margin-top:16px">
+   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h3 style="margin:0">Lançamentos</h3>
+    <div style="display:flex;gap:8px">
+     <button class="btn small green" onclick="openCashModal('entrada')">+ Entrada</button>
+     <button class="btn small danger" onclick="openCashModal('saida')">+ Saída</button>
+    </div>
+   </div>
+   <div style="overflow:auto"><table id="cashTable"></table></div>
+  </div>
+ </section>
+
+ <!-- ESTOQUE -->
+ <section id="page-inventory" class="hidden">
+  <div class="pagehead"><h2>📦 Estoque</h2><button class="btn" onclick="openInvModal()">+ Adicionar item</button></div>
+  <div id="invAlerts"></div>
+  <div class="panel"><div style="overflow:auto"><table id="invTable"></table></div></div>
+ </section>
+
+ <!-- ORGANIZAÇÃO -->
+ <section id="page-org" class="hidden">
+  <div class="pagehead"><h2>🗓️ Organização</h2></div>
+  <div class="grid g2">
+   <div class="panel"><h3>👥 Fornecedores</h3><div id="supList"></div>
+    <div style="display:grid;gap:8px;margin-top:10px">
+     <input id="supName" placeholder="Nome do fornecedor" style="border:1px solid var(--line);border-radius:11px;padding:10px">
+     <input id="supPhone" placeholder="Telefone/WhatsApp" style="border:1px solid var(--line);border-radius:11px;padding:10px">
+     <input id="supItems" placeholder="O que fornece" style="border:1px solid var(--line);border-radius:11px;padding:10px">
+     <button class="btn small dark" onclick="addSupplier()">+ Adicionar fornecedor</button></div></div>
+   <div class="panel"><h3>🎯 Metas</h3><div id="goalList"></div>
+    <div style="display:grid;gap:8px;margin-top:10px">
+     <input id="goalTitle" placeholder="Nova meta (ex.: vender 50 pizzas no mês)" style="border:1px solid var(--line);border-radius:11px;padding:10px">
+     <input id="goalTarget" type="number" placeholder="Valor alvo (R$)" style="border:1px solid var(--line);border-radius:11px;padding:10px">
+     <button class="btn small dark" onclick="addGoal()">+ Adicionar meta</button></div></div>
+   <div class="panel"><h3>🔧 Equipamentos</h3><div id="eqList"></div>
+    <div style="display:flex;gap:8px;margin-top:10px"><input id="eqName" placeholder="Equipamento (fritadeira, freezer...)" style="flex:1;border:1px solid var(--line);border-radius:11px;padding:10px"><button class="btn small dark" onclick="addEq()">+</button></div></div>
+   <div class="panel"><h3>📋 Planejamento</h3>
+    <div style="display:flex;gap:8px;margin-bottom:8px">
+     <select id="planKind" style="border:1px solid var(--line);border-radius:11px;padding:10px"><option value="semanal">Semanal</option><option value="mensal">Mensal</option><option value="compras">Compras</option><option value="calendario">Calendário</option></select>
+     <input id="planTitle" placeholder="Item do planejamento" style="flex:1;border:1px solid var(--line);border-radius:11px;padding:10px">
+     <button class="btn small dark" onclick="addPlan()">+</button></div>
+    <div id="planList"></div></div>
+  </div>
+ </section>
+
+ <!-- CONFIGURAÇÕES -->
+ <section id="page-settings" class="hidden">
+  <div class="pagehead"><h2>⚙️ Configurações</h2><button class="btn" onclick="saveSettings()">💾 Salvar alterações</button></div>
+  <div class="grid g2">
+   <div class="panel"><h3>🏷️ Marca e textos</h3>
+    <div class="field"><label>Nome da empresa</label><input id="set_brand_name"></div>
+    <div class="row2">
+     <div class="field"><label>Iniciais do logo</label><input id="set_brand_initials" maxlength="3"></div>
+     <div class="field"><label>Subtítulo do logo</label><input id="set_brand_sub"></div>
+    </div>
+    <div class="field"><label>Frase do topo / kicker</label><input id="set_hero_kicker"></div>
+    <div class="field"><label>Título principal</label><input id="set_hero_title"></div>
+    <div class="field"><label>Texto de apresentação</label><textarea id="set_hero_text" rows="2"></textarea></div>
+    <div class="field"><label>Título "Sobre"</label><input id="set_about_title"></div>
+    <div class="field"><label>Texto "Sobre"</label><textarea id="set_about_text" rows="2"></textarea></div>
+   </div>
+   <div class="panel"><h3>📍 Local, horário e contato</h3>
+    <div class="field"><label>Endereço</label><textarea id="set_address" rows="2"></textarea></div>
+    <div class="field"><label>Texto da localização</label><input id="set_location_intro"></div>
+    <div class="row2">
+     <div class="field"><label>Horário (seg–sáb)</label><input id="set_hours_week"></div>
+     <div class="field"><label>Domingo</label><input id="set_hours_sunday"></div>
+    </div>
+    <div class="field"><label>WhatsApp (somente números, com DDD)</label><input id="set_whatsapp" inputmode="tel" placeholder="86999990000"></div>
+    <div class="row2">
+     <div class="field"><label>Link do Facebook</label><input id="set_social_face"></div>
+     <div class="field"><label>Link do Instagram</label><input id="set_social_insta"></div>
+    </div>
+    <div class="field"><label>Texto da seção contato</label><textarea id="set_contact_text" rows="2"></textarea></div>
+   </div>
+   <div class="panel"><h3>🎨 Cores da identidade visual</h3>
+    <div class="row2">
+     <div class="field"><label>Grafite</label><input type="color" id="set_color_dark" style="height:46px" value="#2d2f30" disabled></div>
+     <div class="field"><label>Creme</label><input type="color" id="set_color_cream" style="height:46px" value="#f6f0e5" disabled></div>
+     <div class="field"><label>Bege</label><input type="color" id="set_color_beige" style="height:46px" value="#d5b987" disabled></div>
+     <div class="field"><label>Laranja queimado</label><input type="color" id="set_color_orange" style="height:46px" value="#c96b2d" disabled></div>
+    </div>
+    <p class="help">As cores da identidade visual são fixas e não são alteradas pelo botão “Salvar alterações”.</p>
+   </div>
+   <div class="panel"><h3>🔒 Segurança</h3>
+    <div class="row2">
+     <div class="field"><label>PIN atual</label><input id="pinCur" maxlength="8" inputmode="numeric"></div>
+     <div class="field"><label>Novo PIN (4–8 dígitos)</label><input id="pinNew" maxlength="8" inputmode="numeric"></div>
+    </div>
+    <button class="btn dark small" onclick="changePin()">Alterar PIN</button>
+    <p class="help">O PIN nunca fica no código do site: é gravado com criptografia bcrypt no banco de dados. A sessão usa cookie HttpOnly válido por 7 dias.</p>
+   </div>
+  </div>
+ </section>
+
+ </main>
+</div>
+
+<!-- modais + alarme -->
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+<div id="newOrderAlarm"><div class="alarmbox">
+ <div class="big">🔔</div><h2>Novo pedido recebido!</h2>
+ <div id="alarmBody" style="text-align:left;font-size:14px;margin:12px 0"></div>
+ <button class="btn wide" onclick="closeAlarm()">Ver no painel</button>
+</div></div>
+<div id="toasts"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+(function(){
+'use strict';
+
+const KEY='ponto_do_lanche_admin_v1';
+const DEFAULT={
+ pin:'123456', logged:false,
+ settings:{brand_name:'Ponto do Lanche',brand_initials:'PL',brand_sub:'CAFÉ • SALGADOS • PIZZAS • BEBIDAS',hero_kicker:'PEDIDO ONLINE • RETIRADA NO PONTO',hero_title:'Seu lanche, do seu jeito.',hero_text:'Escolha seu lanche. A gente prepara. Você retira.',about_title:'Sobre o Ponto do Lanche',about_text:'Salgados, lanches, pizzas e bebidas para você.',address:'',location_intro:'Retirada no ponto',hours_week:'',hours_sunday:'',whatsapp:'',social_face:'',social_insta:'',contact_text:'Fale com a gente.',color_dark:'#2d2f30',color_cream:'#f6f0e5',color_beige:'#d5b987',color_orange:'#c96b2d'},
+ categories:['Salgados','Lanches','Pizzas','Bebidas','Doces'],
+ products:[
+  {id:1,name:'Coxinha',category:'Salgados',price:6,available:true,description:'Coxinha crocante e recheada',icon:'🍗'},
+  {id:2,name:'Pastel',category:'Salgados',price:7,available:true,description:'Pastel quentinho com recheio',icon:'🥟'},
+  {id:3,name:'Bolinha de queijo',category:'Salgados',price:6,available:true,description:'Salgado de queijo',icon:'🧀'},
+  {id:4,name:'Esfirra',category:'Salgados',price:7,available:true,description:'Esfirra assada e saborosa',icon:'🥙'},
+  {id:5,name:'Crepe',category:'Lanches',price:12,available:true,description:'Crepe preparado na hora',icon:'🥞'},
+  {id:6,name:'Coca-Cola 2L',category:'Bebidas',price:12,available:true,description:'Bebida gelada',icon:'🥤'},
+  {id:7,name:'Mini bolo',category:'Doces',price:10,available:true,description:'Pequeno bolo para adoçar o dia',icon:'🍰'}
+ ], promos:[], notes:[], tasks:[], cash:[], inventory:[], suppliers:[], goals:[], equipment:[], plans:[], orders:[]
+};
+
+let db=load();
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function load(){try{const x=JSON.parse(localStorage.getItem(KEY)||'null');return x?Object.assign(clone(DEFAULT),x,{settings:Object.assign(clone(DEFAULT.settings),x.settings||{})}):clone(DEFAULT);}catch(e){return clone(DEFAULT)}}
+function save(){localStorage.setItem(KEY,JSON.stringify(db));}
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function money(v){return 'R$ '+Number(v||0).toFixed(2).replace('.',',');}
+function $(id){return document.getElementById(id)}
+function val(id){return $(id)?.value?.trim()||''}
+function uid(){return Date.now()+Math.floor(Math.random()*1000)}
+function toast(msg){const root=$('toasts');if(!root)return;const d=document.createElement('div');d.className='toast';d.textContent=msg;root.appendChild(d);setTimeout(()=>d.remove(),2800)}
+function modal(html){$('mbox').innerHTML=html;$('modal').classList.add('show')}
+function closeModal(){ $('modal').classList.remove('show');$('mbox').innerHTML=''; }
+window.closeModal=closeModal;
+
+window.doLogin=function(){
+ const user=val('lu'), pin=['p0','p1','p2','p3','p4','p5'].map(id=>$(id)?.value||'').join('');
+ if(user!=='proprietario'){ $('lerr').textContent='Usuário inválido.'; return; }
+ if(pin!==db.pin){ $('lerr').textContent='PIN incorreto.'; return; }
+ db.logged=true;save();$('loginScreen').classList.add('hidden');$('app').classList.remove('hidden');$('lerr').textContent='';go('dashboard');toast('Acesso liberado.');
+};
+window.logout=function(){db.logged=false;save();$('app').classList.add('hidden');$('loginScreen').classList.remove('hidden');['p0','p1','p2','p3','p4','p5'].forEach(id=>$(id).value='');};
+window.go=function(page){
+ if(!db.logged)return;
+ document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+ const s=$('page-'+page);if(s)s.classList.remove('hidden');
+ document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('on',b.dataset.page===page));
+ if(page==='dashboard')drawDashboard();
+ if(page==='orders')drawOrders();
+ if(page==='menu')drawMenu();
+ if(page==='notes')drawNotes();
+ if(page==='cash')loadCash();
+ if(page==='inventory')drawInventory();
+ if(page==='org')drawOrg();
+ if(page==='settings')drawSettings();
+};
+
+function drawDashboard(){
+ const total=db.orders.reduce((s,o)=>s+Number(o.total||0),0), pending=db.orders.filter(o=>!['Finalizado','Cancelado'].includes(o.status)).length;
+ $('dashTop').innerHTML=[['Pedidos hoje',db.orders.length,'🧾'],['Vendas',money(total),'💰'],['Em andamento',pending,'⏳'],['Itens no estoque',db.inventory.length,'📦']].map(x=>`<div class="stat"><span>${x[2]}</span><small>${x[0]}</small><b>${x[1]}</b></div>`).join('');
+ const daily=db.orders.slice(-14);drawBars('chartDaily',daily.map(o=>({l:'#'+o.id,v:Number(o.total||0)})));
+ const counts={};db.orders.forEach(o=>(o.items||[]).forEach(i=>counts[i.name]=(counts[i.name]||0)+Number(i.qty||1)));
+ drawBars('chartTop',Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,8).map(x=>({l:x[0],v:x[1]})));
+ drawBars('chartWeekly',groupSales(7));drawBars('chartMonthly',groupSales(30));
+}
+function groupSales(days){const out=[];const now=Date.now();for(let i=Math.min(days,14)-1;i>=0;i--){const d=new Date(now-i*86400000);const key=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});const v=db.orders.filter(o=>{const t=new Date(o.createdAt||0);return t.toDateString()===d.toDateString()}).reduce((s,o)=>s+Number(o.total||0),0);out.push({l:key,v})}return out;}
+function drawBars(id,arr){const e=$(id);if(!e)return;if(!arr.length){e.innerHTML='<div class="empty">Sem dados ainda.</div>';return}const max=Math.max(...arr.map(x=>Number(x.v)||0),1);e.innerHTML=arr.map(x=>`<div class="barrow"><span>${esc(x.l)}</span><div class="bar"><i style="width:${Math.max(4,(Number(x.v)||0)/max*100)}%"></i></div><b>${typeof x.v==='number'&&x.v>20?money(x.v):x.v}</b></div>`).join('')}
+
+function drawOrders(){
+ const statuses=['Novo','Em preparo','Pronto','Finalizado'];
+ $('kanban').innerHTML=statuses.map(st=>`<div class="panel"><h3>${st} <span class="bdg">${db.orders.filter(o=>o.status===st).length}</span></h3>${db.orders.filter(o=>o.status===st).map(orderCard).join('')||'<div class="empty">Nenhum pedido.</div>'}</div>`).join('');
+}
+function orderCard(o){const next=o.status==='Novo'?'Em preparo':o.status==='Em preparo'?'Pronto':o.status==='Pronto'?'Finalizado':null;return `<article class="order-card"><div><b>#${o.id} — ${esc(o.customer||'Cliente')}</b><small>${esc(o.phone||'')} • ${new Date(o.createdAt).toLocaleString('pt-BR')}</small></div><div class="items">${(o.items||[]).map(i=>`<div>${i.qty}× ${esc(i.name)} — ${money(i.price*i.qty)}</div>`).join('')}</div><strong>${money(o.total)}</strong>${o.notes?`<p>📝 ${esc(o.notes)}</p>`:''}<div class="order-actions">${next?`<button class="btn small dark" onclick="advanceOrder(${o.id})">${next}</button>`:''}<button class="btn small" onclick="viewOrder(${o.id})">Detalhes</button><button class="btn small danger" onclick="cancelOrder(${o.id})">Cancelar</button></div></article>`}
+window.advanceOrder=function(id){const o=db.orders.find(x=>x.id===id);if(!o)return;o.status=o.status==='Novo'?'Em preparo':o.status==='Em preparo'?'Pronto':'Finalizado';save();drawOrders();drawDashboard();toast('Pedido #'+id+' atualizado.');};
+window.cancelOrder=function(id){const o=db.orders.find(x=>x.id===id);if(!o)return;if(confirm('Cancelar o pedido #'+id+'?')){o.status='Cancelado';save();drawOrders();toast('Pedido cancelado.')}};
+window.viewOrder=function(id){const o=db.orders.find(x=>x.id===id);if(!o)return;modal(`<h3>Pedido #${o.id}</h3><p><b>Cliente:</b> ${esc(o.customer)}<br><b>Telefone:</b> ${esc(o.phone)}<br><b>Status:</b> ${esc(o.status)}<br><b>Pagamento:</b> ${esc(o.payment||'')}<br><b>Total:</b> ${money(o.total)}</p><hr>${(o.items||[]).map(i=>`<p>${i.qty}× ${esc(i.name)} — ${money(i.price*i.qty)}</p>`).join('')}<button class="btn wide" onclick="closeModal()">Fechar</button>`)};
+
+function drawMenu(){
+ $('menuAdmin').innerHTML=`<div class="panel"><div class="tablewrap"><table><thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Status</th><th>Ações</th></tr></thead><tbody>${db.products.map(p=>`<tr><td>${esc(p.icon||'🍔')} ${esc(p.name)}<small>${esc(p.description||'')}</small></td><td>${esc(p.category)}</td><td>${money(p.price)}</td><td>${p.available?'Disponível':'Pausado'}</td><td><button class="btn small" onclick="editProduct(${p.id})">Editar</button> <button class="btn small" onclick="toggleProduct(${p.id})">${p.available?'Pausar':'Ativar'}</button> <button class="btn small danger" onclick="removeProduct(${p.id})">Excluir</button></td></tr>`).join('')}</tbody></table></div></div>`;
+ $('promoAdmin').innerHTML=db.promos.length?db.promos.map(p=>`<div class="listrow"><b>${esc(p.title)}</b><span>${esc(p.description||'')} ${p.price?money(p.price):''}</span><button class="btn small danger" onclick="removePromo(${p.id})">Excluir</button></div>`).join(''):'<div class="empty">Nenhuma promoção cadastrada.</div>';
+}
+window.newCategoryModal=function(){modal(`<h3>Nova categoria</h3><div class="field"><label>Nome</label><input id="mCat"></div><button class="btn wide" onclick="addCategory()">Salvar</button>`)};
+window.addCategory=function(){const n=val('mCat');if(!n)return toast('Digite o nome da categoria.');if(!db.categories.includes(n))db.categories.push(n);save();closeModal();drawMenu();toast('Categoria adicionada.');};
+window.openProductModal=function(id){const p=id?db.products.find(x=>x.id===id):null;modal(`<h3>${p?'Editar produto':'Adicionar produto'}</h3><div class="field"><label>Nome</label><input id="mName" value="${esc(p?.name||'')}"></div><div class="row2"><div class="field"><label>Preço</label><input id="mPrice" type="number" step="0.01" value="${p?.price??''}"></div><div class="field"><label>Ícone</label><input id="mIcon" value="${esc(p?.icon||'🍔')}"></div></div><div class="field"><label>Categoria</label><select id="mCategory">${db.categories.map(c=>`<option ${c===(p?.category||db.categories[0])?'selected':''}>${esc(c)}</option>`).join('')}</select></div><div class="field"><label>Descrição</label><textarea id="mDesc">${esc(p?.description||'')}</textarea></div><button class="btn wide" onclick="saveProduct(${p?.id||0})">Salvar</button>`)};
+window.saveProduct=function(id){const n=val('mName'),pr=Number(val('mPrice'));if(!n||!pr)return toast('Informe nome e preço.');let p=id?db.products.find(x=>x.id===id):{id:uid(),available:true};Object.assign(p,{name:n,price:pr,category:val('mCategory'),icon:val('mIcon')||'🍔',description:val('mDesc')});if(!id)db.products.push(p);save();closeModal();drawMenu();toast(id?'Produto atualizado.':'Produto adicionado.');};
+window.editProduct=id=>openProductModal(id);
+window.removeProduct=function(id){if(!confirm('Excluir este produto?'))return;db.products=db.products.filter(p=>p.id!==id);save();drawMenu();toast('Produto excluído.');};
+window.toggleProduct=function(id){const p=db.products.find(x=>x.id===id);if(!p)return;p.available=!p.available;save();drawMenu();toast(p.available?'Produto ativado.':'Produto pausado.');};
+window.openPromoModal=function(){modal(`<h3>Nova promoção</h3><div class="field"><label>Título</label><input id="mPromoTitle"></div><div class="field"><label>Descrição</label><textarea id="mPromoDesc"></textarea></div><div class="field"><label>Preço promocional (opcional)</label><input id="mPromoPrice" type="number" step="0.01"></div><button class="btn wide" onclick="addPromo()">Salvar promoção</button>`)};
+window.addPromo=function(){const title=val('mPromoTitle');if(!title)return toast('Digite o título.');db.promos.push({id:uid(),title,description:val('mPromoDesc'),price:Number(val('mPromoPrice'))||0});save();closeModal();drawMenu();toast('Promoção adicionada.');};
+window.removePromo=function(id){db.promos=db.promos.filter(x=>x.id!==id);save();drawMenu();};
+
+function drawNotes(){const q=val('noteSearch').toLowerCase();$('notesList').innerHTML=db.notes.filter(n=>(n.title+' '+n.text).toLowerCase().includes(q)).map(n=>`<div class="panel listrow"><div><b>${esc(n.title)}</b><p>${esc(n.text)}</p><small>${new Date(n.createdAt).toLocaleString('pt-BR')}</small></div><button class="btn small danger" onclick="removeNote(${n.id})">Excluir</button></div>`).join('')||'<div class="empty">Nenhuma anotação.</div>';drawTasks();}
+window.openNoteModal=function(){modal(`<h3>Nova anotação</h3><div class="field"><label>Título</label><input id="mNoteTitle"></div><div class="field"><label>Anotação</label><textarea id="mNoteText" rows="6"></textarea></div><button class="btn wide" onclick="addNote()">Salvar</button>`)};
+window.addNote=function(){const title=val('mNoteTitle');if(!title)return toast('Digite um título.');db.notes.unshift({id:uid(),title,text:val('mNoteText'),createdAt:Date.now()});save();closeModal();drawNotes();};
+window.removeNote=function(id){db.notes=db.notes.filter(x=>x.id!==id);save();drawNotes();};
+window.addTask=function(){const t=val('taskInput');if(!t)return;db.tasks.push({id:uid(),text:t,done:false});$('taskInput').value='';save();drawTasks();};
+function drawTasks(){$('taskList').innerHTML=db.tasks.map(t=>`<div class="listrow"><label><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})"> ${esc(t.text)}</label><button class="btn small danger" onclick="removeTask(${t.id})">✕</button></div>`).join('')||'<div class="empty">Nenhuma tarefa.</div>';}
+window.toggleTask=id=>{const t=db.tasks.find(x=>x.id===id);if(t)t.done=!t.done;save();drawTasks()};window.removeTask=id=>{db.tasks=db.tasks.filter(x=>x.id!==id);save();drawTasks()};
+
+window.loadCash=function(){const period=$('cashPeriod').value;if(period==='custom')$('cashCustom').classList.remove('hidden');else $('cashCustom').classList.add('hidden');let from=0,to=Date.now()+86400000;if(period==='hoje')from=new Date().setHours(0,0,0,0);if(period==='semana')from=Date.now()-7*86400000;if(period==='mes')from=Date.now()-30*86400000;if(period==='custom'){from=new Date(val('cashFrom')||'1970-01-01').getTime();to=new Date(val('cashTo')||'2999-12-31').getTime()+86400000}const arr=db.cash.filter(x=>x.date>=from&&x.date<to),ent=arr.filter(x=>x.kind==='entrada').reduce((s,x)=>s+x.value,0),out=arr.filter(x=>x.kind==='saida').reduce((s,x)=>s+x.value,0);$('cashTotals').innerHTML=[['Entradas',money(ent)],['Saídas',money(out)],['Saldo',money(ent-out)],['Lançamentos',arr.length]].map(x=>`<div class="stat"><small>${x[0]}</small><b>${x[1]}</b></div>`).join('');$('cashTable').innerHTML=`<thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Valor</th><th></th></tr></thead><tbody>${arr.slice().reverse().map(x=>`<tr><td>${new Date(x.date).toLocaleDateString('pt-BR')}</td><td>${x.kind}</td><td>${esc(x.description)}</td><td>${money(x.value)}</td><td><button class="btn small danger" onclick="removeCash(${x.id})">Excluir</button></td></tr>`).join('')||'<tr><td colspan="5">Nenhum lançamento.</td></tr>'}</tbody>`;};
+window.openCashModal=function(kind){modal(`<h3>${kind==='entrada'?'Nova entrada':'Nova saída'}</h3><div class="field"><label>Descrição</label><input id="mCashDesc"></div><div class="field"><label>Valor</label><input id="mCashValue" type="number" step="0.01"></div><button class="btn wide" onclick="addCash('${kind}')">Salvar</button>`)};
+window.addCash=function(kind){const v=Number(val('mCashValue'));if(!v)return toast('Informe o valor.');db.cash.push({id:uid(),kind,description:val('mCashDesc')||'Lançamento',value:v,date:Date.now()});save();closeModal();loadCash();toast('Lançamento salvo.');};window.removeCash=id=>{db.cash=db.cash.filter(x=>x.id!==id);save();loadCash()};
+
+window.openInvModal=function(){modal(`<h3>Novo item de estoque</h3><div class="field"><label>Item</label><input id="mInvName"></div><div class="row2"><div class="field"><label>Quantidade</label><input id="mInvQty" type="number" step="0.01"></div><div class="field"><label>Estoque mínimo</label><input id="mInvMin" type="number" step="0.01"></div></div><div class="field"><label>Unidade</label><input id="mInvUnit" value="un"></div><button class="btn wide" onclick="addInv()">Salvar</button>`)};
+window.addInv=function(){const n=val('mInvName'),q=Number(val('mInvQty'));if(!n)return toast('Informe o item.');db.inventory.push({id:uid(),name:n,qty:q,min:Number(val('mInvMin'))||0,unit:val('mInvUnit')||'un'});save();closeModal();drawInventory();};
+function drawInventory(){const low=db.inventory.filter(x=>x.qty<=x.min);$('invAlerts').innerHTML=low.length?`<div class="alert">⚠️ ${low.length} item(ns) abaixo do estoque mínimo.</div>`:'';$('invTable').innerHTML=`<thead><tr><th>Item</th><th>Quantidade</th><th>Mínimo</th><th>Status</th><th>Ações</th></tr></thead><tbody>${db.inventory.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.qty} ${esc(x.unit)}</td><td>${x.min}</td><td>${x.qty<=x.min?'⚠️ Baixo':'OK'}</td><td><button class="btn small" onclick="editInv(${x.id})">Editar</button><button class="btn small danger" onclick="removeInv(${x.id})">Excluir</button></td></tr>`).join('')||'<tr><td colspan="5">Nenhum item cadastrado.</td></tr>'}</tbody>`;}
+window.editInv=function(id){const x=db.inventory.find(a=>a.id===id);if(!x)return;const q=prompt('Quantidade atual:',x.qty);if(q===null)return;x.qty=Number(q)||0;save();drawInventory();};window.removeInv=id=>{db.inventory=db.inventory.filter(x=>x.id!==id);save();drawInventory()};
+
+function drawOrg(){
+ $('supList').innerHTML=db.suppliers.map(x=>`<div class="listrow"><div><b>${esc(x.name)}</b><small>${esc(x.phone)} • ${esc(x.items)}</small></div><button class="btn small danger" onclick="removeSupplier(${x.id})">Excluir</button></div>`).join('')||'<div class="empty">Nenhum fornecedor.</div>';
+ $('goalList').innerHTML=db.goals.map(x=>`<div class="listrow"><div><b>${esc(x.title)}</b><small>Meta: ${money(x.target)}</small></div><button class="btn small danger" onclick="removeGoal(${x.id})">Excluir</button></div>`).join('')||'<div class="empty">Nenhuma meta.</div>';
+ $('eqList').innerHTML=db.equipment.map(x=>`<div class="listrow"><span>🔧 ${esc(x.name)}</span><button class="btn small danger" onclick="removeEq(${x.id})">✕</button></div>`).join('')||'<div class="empty">Nenhum equipamento.</div>';
+ $('planList').innerHTML=db.plans.map(x=>`<div class="listrow"><div><b>${esc(x.title)}</b><small>${esc(x.kind)}</small></div><button class="btn small danger" onclick="removePlan(${x.id})">✕</button></div>`).join('')||'<div class="empty">Nenhum planejamento.</div>';
+}
+window.addSupplier=function(){const n=val('supName');if(!n)return toast('Informe o fornecedor.');db.suppliers.push({id:uid(),name:n,phone:val('supPhone'),items:val('supItems')});['supName','supPhone','supItems'].forEach(id=>$(id).value='');save();drawOrg()};window.removeSupplier=id=>{db.suppliers=db.suppliers.filter(x=>x.id!==id);save();drawOrg()};
+window.addGoal=function(){const t=val('goalTitle');if(!t)return toast('Informe a meta.');db.goals.push({id:uid(),title:t,target:Number(val('goalTarget'))||0});$('goalTitle').value='';$('goalTarget').value='';save();drawOrg()};window.removeGoal=id=>{db.goals=db.goals.filter(x=>x.id!==id);save();drawOrg()};
+window.addEq=function(){const n=val('eqName');if(!n)return;db.equipment.push({id:uid(),name:n});$('eqName').value='';save();drawOrg()};window.removeEq=id=>{db.equipment=db.equipment.filter(x=>x.id!==id);save();drawOrg()};
+window.addPlan=function(){const t=val('planTitle');if(!t)return;db.plans.push({id:uid(),kind:$('planKind').value,title:t});$('planTitle').value='';save();drawOrg()};window.removePlan=id=>{db.plans=db.plans.filter(x=>x.id!==id);save();drawOrg()};
+
+const settingIds={brand_name:'brand_name',brand_initials:'brand_initials',brand_sub:'brand_sub',hero_kicker:'hero_kicker',hero_title:'hero_title',hero_text:'hero_text',about_title:'about_title',about_text:'about_text',address:'address',location_intro:'location_intro',hours_week:'hours_week',hours_sunday:'hours_sunday',whatsapp:'whatsapp',social_face:'social_face',social_insta:'social_insta',contact_text:'contact_text',color_dark:'color_dark',color_cream:'color_cream',color_beige:'color_beige',color_orange:'color_orange'};
+function drawSettings(){Object.entries(settingIds).forEach(([k,id])=>{if($( 'set_'+k))$('set_'+k).value=db.settings[id]??''})}
+window.saveSettings=function(){
+ const protectedColors=['color_dark','color_cream','color_beige','color_orange'];
+ Object.entries(settingIds).forEach(([k,id])=>{if(!protectedColors.includes(k)&&$('set_'+k))db.settings[id]=$('set_'+k).value});
+ // As cores da identidade visual são fixas e não são alteradas pelo botão Salvar.
+ db.settings.color_dark='#2d2f30';db.settings.color_cream='#f6f0e5';db.settings.color_beige='#d5b987';db.settings.color_orange='#c96b2d';
+ save();applyPublicColors();toast('Configurações salvas.');
+};
+function applyPublicColors(){
+ document.documentElement.style.setProperty('--dark','#2d2f30');
+ document.documentElement.style.setProperty('--cream','#f6f0e5');
+ document.documentElement.style.setProperty('--beige','#d5b987');
+ document.documentElement.style.setProperty('--orange','#c96b2d');
+}
+window.changePin=function(){const cur=val('pinCur'),n=val('pinNew');if(cur!==db.pin)return toast('PIN atual incorreto.');if(!/^\d{4,8}$/.test(n))return toast('O novo PIN deve ter 4 a 8 dígitos.');db.pin=n;save();$('pinCur').value='';$('pinNew').value='';toast('PIN alterado.');};
+
+function closeAlarm(){$('newOrderAlarm').style.display='none'}window.closeAlarm=closeAlarm;
+document.querySelectorAll('.pin').forEach((el,i)=>el.addEventListener('input',()=>{if(el.value && i<5)$('p'+(i+1)).focus()}));
+$('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
+$('cashPeriod').addEventListener('change',loadCash);
+applyPublicColors();
+
+function setLocked(locked){
+ document.documentElement.classList.toggle('admin-locked',locked);
+ document.body.classList.toggle('admin-locked',locked);
+ $('loginScreen').classList.toggle('hidden',!locked);
+ $('app').classList.toggle('hidden',locked);
+ $('app').setAttribute('aria-hidden',locked?'true':'false');
+ $('loginScreen').setAttribute('aria-hidden',locked?'false':'true');
+ if(locked){
+   document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+   $('lerr').textContent='';
+ }else{
+   go('dashboard');
+ }
+}
+
+window.doLogin=function(){
+ const user=val('lu');
+ const pin=['p0','p1','p2','p3','p4','p5'].map(id=>$(id)?.value||'').join('');
+ if(user!=='proprietario'){ $('lerr').textContent='Usuário inválido.'; return; }
+ if(pin!==db.pin){ $('lerr').textContent='PIN incorreto.'; return; }
+ db.logged=true;save();
+ ['p0','p1','p2','p3','p4','p5'].forEach(id=>$(id).value='');
+ setLocked(false);
+ toast('Acesso liberado.');
+};
+
+window.logout=function(){
+ db.logged=false;save();
+ ['p0','p1','p2','p3','p4','p5'].forEach(id=>$(id).value='');
+ setLocked(true);
+ $('lu').focus();
+};
+
+document.querySelectorAll('.pin').forEach((el,i)=>{
+ el.addEventListener('input',()=>{
+   el.value=el.value.replace(/\D/g,'').slice(0,1);
+   if(el.value && i<5)$('p'+(i+1)).focus();
+ });
+ el.addEventListener('keydown',e=>{
+   if(e.key==='Backspace'&&!el.value&&i>0)$('p'+(i-1)).focus();
+   if(e.key==='Enter')window.doLogin();
+ });
+});
+$('lu').addEventListener('keydown',e=>{if(e.key==='Enter')$('p0').focus()});
+
+setLocked(!db.logged);
+setInterval(()=>{if($('clock')&&!document.documentElement.classList.contains('admin-locked'))$('clock').textContent=new Date().toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'medium'})},1000);
+
+// Integração em tempo real com o Index 1 pelo armazenamento compartilhado.
+let __lastOrderCount=(db.orders||[]).length;
+window.addEventListener('storage',e=>{
+ if(e.key!=='ponto_do_lanche_admin_v1')return;
+ const oldCount=(db.orders||[]).length;
+ db=load();
+ const newCount=(db.orders||[]).length;
+ if(newCount>oldCount){
+   const latest=db.orders.slice().sort((a,b)=>(b.createdAt||0)-(a.createdAt||0))[0];
+   if(latest){
+     $('newOrdersBadge').textContent=String(newCount-oldCount);
+     $('newOrdersBadge').classList.remove('hidden');
+     const alarm=$('newOrderAlarm');
+     if(alarm){
+       $('alarmBody').innerHTML='<b>#'+esc(latest.id)+'</b> — '+esc(latest.customer||'Cliente')+'<br>'+
+         (latest.items||[]).map(i=>esc(i.qty+'× '+i.name)).join('<br>')+'<br><b>'+money(latest.total)+'</b>';
+       alarm.style.display='grid';
+     }
+     toast('Novo pedido recebido!');
+   }
+ }
+ drawDashboard();drawOrders();drawMenu();drawNotes();loadCash();drawInventory();drawOrg();drawSettings();
+});
+
+
+// ================= SUPABASE =================
+const SUPABASE_URL='https://cvgzmhrphmautajyvnpv.supabase.co';
+const SUPABASE_KEY='sb_publishable_r826qXozWR8SfCEiB-ygvw_ERWvDJ0I';
+const SB_HEADERS={
+  'apikey':SUPABASE_KEY,
+  'Authorization':'Bearer '+SUPABASE_KEY,
+  'Content-Type':'application/json',
+  'Prefer':'return=representation'
+};
+let __sbStateTimer=null, __sbOrderTimer=null, __sbLastOrderIds=new Set();
+
+async function sbFetch(path, options={}){
+  const r=await fetch(SUPABASE_URL+'/rest/v1/'+path,{...options,headers:{...SB_HEADERS,...(options.headers||{})}});
+  if(!r.ok) throw new Error(await r.text());
+  const txt=await r.text();
+  return txt?JSON.parse(txt):null;
+}
+
+function sbStateData(){
+  const copy=clone(db);
+  delete copy.orders;
+  return copy;
+}
+
+async function sbSaveState(){
+  try{
+    await sbFetch('ponto_site_state?on_conflict=id',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=representation'},body:JSON.stringify({id:1,data:sbStateData(),updated_at:new Date().toISOString()})});
+  }catch(e){console.warn('Supabase state:',e)}
+}
+
+async function sbLoadState(){
+  try{
+    const rows=await sbFetch('ponto_site_state?id=eq.1&select=id,data,updated_at');
+    if(rows&&rows[0]&&rows[0].data){
+      const incoming=rows[0].data;
+      db=Object.assign(clone(DEFAULT),db,incoming,{settings:Object.assign(clone(DEFAULT.settings),db.settings||{},incoming.settings||{})});
+      // Não permita que um estado remoto vazio apague o cardápio padrão.
+      if(!Array.isArray(incoming.categories)||incoming.categories.length===0) db.categories=Array.isArray(db.categories)&&db.categories.length?db.categories:clone(DEFAULT.categories);
+      if(!Array.isArray(incoming.products)||incoming.products.length===0) db.products=Array.isArray(db.products)&&db.products.length?db.products:clone(DEFAULT.products);
+      save();
+    }
+  }catch(e){console.warn('Supabase load state:',e)}
+}
+
+function normalizeSbOrder(row){
+  const d=row&&row.data?row.data:{};
+  return {...d,id:d.id??row.id,code:d.code||row.code,status:row.status||d.status||'Novo',createdAt:d.createdAt||row.created_at,updatedAt:row.updated_at};
+}
+
+async function sbLoadOrders(showAlarm=true){
+  try{
+    const rows=await sbFetch('ponto_orders?select=id,code,status,data,created_at,updated_at&order=created_at.desc');
+    const incoming=(rows||[]).map(normalizeSbOrder);
+    const oldByCode=new Map((db.orders||[]).map(o=>[String(o.code||o.id),o]));
+    const merged=incoming.map(o=>({...oldByCode.get(String(o.code||o.id))||{},...o}));
+    const fresh=incoming.filter(o=>!__sbLastOrderIds.has(String(o.code||o.id)));
+    const hadLoaded=__sbLastOrderIds.size>0;
+    db.orders=merged;
+    localStorage.setItem(KEY,JSON.stringify(db));
+    incoming.forEach(o=>__sbLastOrderIds.add(String(o.code||o.id)));
+    drawDashboard();drawOrders();
+    if(showAlarm&&hadLoaded&&fresh.length){
+      const latest=fresh[0];
+      $('newOrdersBadge').textContent=String(fresh.length);
+      $('newOrdersBadge').classList.remove('hidden');
+      const alarm=$('newOrderAlarm');
+      if(alarm){
+        $('alarmBody').innerHTML='<b>#'+esc(latest.code||latest.id)+'</b> — '+esc(latest.customer||'Cliente')+'<br>'+
+          (latest.items||[]).map(i=>esc(i.qty+'× '+i.name)).join('<br>')+'<br><b>'+money(latest.total)+'</b>';
+        alarm.style.display='grid';
+      }
+      toast('Novo pedido recebido!');
+    }
+  }catch(e){console.warn('Supabase orders:',e)}
+}
+
+async function sbPatchOrder(code,status){
+  try{
+    await sbFetch('ponto_orders?code=eq.'+encodeURIComponent(code),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status,updated_at:new Date().toISOString()})});
+  }catch(e){console.warn('Supabase order update:',e)}
+}
+
+const __oldSave=save;
+save=function(){__oldSave();clearTimeout(window.__sbSaveTimer);window.__sbSaveTimer=setTimeout(sbSaveState,400)};
+
+const __oldAdvanceOrder=window.advanceOrder;
+window.advanceOrder=async function(id){
+  const o=db.orders.find(x=>String(x.id)===String(id)||String(x.code)===String(id));
+  if(!o)return;
+  const next=o.status==='Novo'?'Em preparo':o.status==='Em preparo'?'Pronto':o.status==='Pronto'?'Finalizado':null;
+  if(!next)return;
+  o.status=next;save();drawOrders();drawDashboard();toast('Pedido atualizado.');
+  await sbPatchOrder(o.code||o.id,next);
+};
+
+const __oldCancelOrder=window.cancelOrder;
+window.cancelOrder=async function(id){
+  const o=db.orders.find(x=>String(x.id)===String(id)||String(x.code)===String(id));
+  if(!o)return;
+  if(confirm('Cancelar o pedido #'+(o.code||o.id)+'?')){
+    o.status='Cancelado';save();drawOrders();drawDashboard();toast('Pedido cancelado.');
+    await sbPatchOrder(o.code||o.id,'Cancelado');
+  }
+};
+
+(async function sbBootstrapAdmin(){
+  await sbLoadState();
+  // Garante que o estado público exista no Supabase logo na primeira abertura.
+  await sbSaveState();
+  await sbLoadOrders(false);
+  __sbOrderTimer=setInterval(()=>sbLoadOrders(true),2000);
+  __sbStateTimer=setInterval(()=>sbSaveState(),5000);
+})();
+
+window.__pontoAdminReady=true;
+})();
+
+</script>
+<!-- Funcionalidade do painel está incorporada neste arquivo. -->
+</body>
+</html>
